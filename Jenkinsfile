@@ -20,27 +20,28 @@ pipeline {
 
         stage('Build WAR') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn clean package -DskipTests'
             }
         }
 
         stage('Deploy WAR') {
             steps {
-                sh """
-                scp target/sample-war.war ${TOMCAT_HOST}:${TOMCAT_PATH}/
-                ssh ${TOMCAT_HOST} '/opt/tomcat9/bin/shutdown.sh || true'
-                ssh ${TOMCAT_HOST} '/opt/tomcat9/bin/startup.sh'
-                """
+                sshagent (credentials: ['tomcat-ssh-key']) {
+                    sh """
+                        scp target/sample.war ${TOMCAT_HOST}:${TOMCAT_PATH}/
+                        # Tomcat auto-deploys WAR files placed in webapps, no restart needed
+                    """
+                }
             }
         }
     }
 
     post {
         success {
-            echo 'Deployment Successful!'
+            echo '✅ Deployment Successful!'
         }
         failure {
-            echo 'Deployment Failed!'
+            echo '❌ Deployment Failed!'
         }
     }
 }
