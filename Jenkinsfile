@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven'
-        jdk 'Java17'
-    }
-
     environment {
         TOMCAT_HOST = 'ec2-user@13.235.243.91'
         TOMCAT_PATH = '/opt/tomcat9/webapps'
