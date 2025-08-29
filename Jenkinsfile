@@ -7,14 +7,14 @@ pipeline {
     }
 
     environment {
-        TOMCAT_HOST = 'ec2-user@<EC2-PUBLIC-IP>'
+        TOMCAT_HOST = 'ec2-user@13.235.243.91'
         TOMCAT_PATH = '/opt/tomcat9/webapps'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/<username>/sample-war.git'
+                git branch: 'master', url: 'https://github.com/indra25cloud/sample-war.git'
             }
         }
 
